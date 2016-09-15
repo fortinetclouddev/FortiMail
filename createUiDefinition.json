@@ -19,7 +19,7 @@
         "name": "adminUsername",
         "type": "Microsoft.Compute.UserNameTextBox",
         "label": "FortiMail administrative username",
-        "toolTip": "Admin username for the FortiMail virtual appliance. Must not be 'admin' nor 'root'.",
+        "toolTip": "Username for the FortiMail virtual appliance. Must not be 'admin' nor 'root'.",
         "osPlatform": "Linux",
         "constraints": {
           "required": true
