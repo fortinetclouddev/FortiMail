@@ -151,7 +151,7 @@
       },
       {
         "name": "IPConfig",
-        "label": "FortiMail IP address assignments",
+        "label": "FortiMail IP address assignment",
         "subLabel": {
           "preValidation": "Configure Public IP Address",
           "postValidation": "Done"
