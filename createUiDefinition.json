@@ -1,0 +1,228 @@
+{
+  "handler": "Microsoft.Compute.MultiVm",
+  "version": "0.0.1-preview",
+  "parameters": {
+    "basics": [
+      {
+        "name": "VMName",
+        "type": "Microsoft.Common.TextBox",
+        "label": "FortiMail virtual appliance name",
+        "toolTip": "This will be used to name the FortiMail virtual appliance.",
+        "defaultValue": "FortiMail",
+        "constraints": {
+          "required": true,
+          "regex": "^[A-Za-z0-9]{1,15}$",
+          "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1 to 15 characters."
+        }
+      },
+      {
+        "name": "adminUsername",
+        "type": "Microsoft.Compute.UserNameTextBox",
+        "label": "FortiMail administrative username",
+        "toolTip": "Admin username for the FortiMail virtual appliance. Must not be 'admin' nor 'root'.",
+        "osPlatform": "Linux",
+        "constraints": {
+          "required": true
+        }
+      },
+      {
+        "name": "passwordElement",
+        "type": "Microsoft.Common.PasswordBox",
+        "label": {
+          "password": "FortiMail password",
+          "confirmPassword": "Confirm password"
+        },
+        "toolTip": {
+          "password": "Administrative account password for FortiMail"
+        },
+        "constraints": {
+          "required": true,
+          "regex": "^(?:(?=.*[a-z])(?:(?=.*[A-Z])(?=.*[\\d\\W])|(?=.*\\W)(?=.*\\d))|(?=.*\\W)(?=.*[A-Z])(?=.*\\d)).{12,72}$",
+          "validationMessage": "The password must be between 12 and 72 characters long, and contain characters from at least 3 of the following groups: uppercase characters, lowercase characters, numbers, and special characters."
+        },
+        "options": {
+          "hideConfirmation": false
+        }
+      },
+      {
+        "name": "sizeofDataDiskInGB",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Size of FortiMail data disk measured in Gigabytes",
+        "toolTip": "This will be used to set the vhd size for the data disk.",
+        "defaultValue": "80",
+        "constraints": {
+          "required": true,
+          "regex": "^([4-9][0-9]|[1-9][0-9][0-9]|10[0-2][0-3])$",
+          "validationMessage": "Only 40 - 1023 allowed"
+        }
+      }
+    ],
+    "steps": [
+      {
+        "name": "StorageNetworkConfig",
+        "label": "Network and Storage Settings",
+        "subLabel": {
+          "preValidation": "Configure the network and storage options",
+          "postValidation": "Done"
+        },
+        "bladeTitle": "Network and storage settings",
+        "elements": [
+          {
+            "name": "virtualNetwork",
+            "type": "Microsoft.Network.VirtualNetworkCombo",
+            "label": {
+              "virtualNetwork": "Virtual network",
+              "subnet": "Subnet"
+            },
+            "toolTip": {
+              "virtualNetwork": "Virtual network name",
+              "subnet": "Subnet required for the FortiMail solution"
+            },
+            "defaultValue": {
+              "name": "FortiMailVNet",
+              "addressPrefixSize": "/16"
+            },
+            "constraints": {
+              "minAddressPrefixSize": "/28"
+            },
+            "subnets": {
+              "subnet1": {
+                "label": "Outside subnet",
+                "defaultValue": {
+                  "name": "Subnet1",
+                  "addressPrefixSize": "/24"
+                },
+                "constraints": {
+                  "minAddressPrefixSize": "/29",
+                  "minAddressCount": 1,
+                  "requireContiguousAddresses": false
+                }
+              }
+            }
+          },
+          {
+            "name": "vmSize",
+            "type": "Microsoft.Compute.SizeSelector",
+            "label": "Virtual machine size",
+            "toolTip": "The size of virtual machine to provision.",
+            "recommendedSizes": [
+              "Standard_D2_v2",
+              "Standard_D3_v2",
+              "Standard_D4_v2"
+            ],
+            "constraints": {
+              "allowedSizes": [
+                "Standard_A3",
+                "Standard_A4",
+                "Standard_D2",
+                "Standard_D3",
+                "Standard_D4",
+                "Standard_D2_v2",
+                "Standard_D3_v2",
+                "Standard_D4_v2"
+              ],
+              "required": true
+            },
+            "osPlatform": "Linux",
+            "imageReference": {
+              "publisher": "Fortinet",
+              "offer": "fortinet_fortimail",
+              "sku": "fortinet_fortimail"
+            },
+            "count": "1"
+          },
+          {
+            "name": "storageAccount",
+            "type": "Microsoft.Storage.StorageAccountSelector",
+            "label": "Storage account",
+            "toolTip": "Storage Account for the disk drive of the Virtual FortiMail.",
+            "defaultValue": {
+              "type": "Standard_LRS"
+            },
+            "constraints": {
+              "allowedTypes": [
+                "Standard_LRS",
+                "Standard_GRS"
+              ],
+              "required": true
+            }
+          }
+        ]
+      },
+      {
+        "name": "IPConfig",
+        "label": "FortiMail IP address assignments",
+        "subLabel": {
+          "preValidation": "Configure Public IP Address",
+          "postValidation": "Done"
+        },
+        "bladeTitle": "IP assignment",
+        "elements": [
+          {
+            "name": "publicIpAddress",
+            "type": "Microsoft.Network.PublicIpAddressCombo",
+            "label": {
+              "publicIpAddress": "First public IP address resource name"
+            },
+            "toolTip": {
+              "publicIpAddress": "Name of the public IP address object"
+            },
+            "defaultValue": {
+              "publicIpAddressName": "FortiMail-PublicIP"
+            },
+            "constraints": {
+              "required": {
+                "domainNameLabel": false
+              }
+            },
+            "options": {
+              "hideNone": true,
+              "hideDomainNameLabel": true 
+            }
+          },
+          {
+            "name": "publicIPAddressTypeElement",
+            "type": "Microsoft.Common.OptionsGroup",
+            "label": "Public IP address type",
+            "toolTip": "",
+            "defaultValue": "Static",
+            "constraints": {
+              "allowedValues": [
+                {
+                  "label": "Static",
+                  "value": "Static"
+                },
+                {
+                  "label": "Dynamic",
+                  "value": "Dynamic"
+                }
+              ],
+              "required": true
+            }
+          }
+        ]
+      }
+    ],
+    "outputs": {
+      "virtualMachineName": "[basics('VMName')]",
+      "adminUsername": "[basics('adminUsername')]",
+      "adminPassword": "[basics('passwordElement')]",
+      "virtualMachineSize": "[steps('StorageNetworkConfig').vmSize]",
+      "publicIpAddressName": "[steps('IPConfig').publicIpAddress.name]",
+      "publicIPAddressType": "[steps('IPConfig').publicIPAddressTypeElement]",
+      "publicIPNewOrExistingOrNone": "[steps('IPConfig').publicIpAddress.newOrExistingOrNone]",
+      "publicIpAddressResourceGroup": "[steps('IPConfig').publicIpAddress.resourceGroup]",
+      "storageAccountName": "[steps('StorageNetworkConfig').storageAccount.name]",
+      "storageAccountType": "[steps('StorageNetworkConfig').storageAccount.type]",
+      "storageAccountNewOrExisting": "[steps('StorageNetworkConfig').storageAccount.newOrExisting]",
+      "storageAccountResourceGroup": "[steps('StorageNetworkConfig').storageAccount.resourceGroup]",
+      "location": "[location()]",
+      "virtualNetworkNewOrExisting": "[steps('StorageNetworkConfig').virtualNetwork.newOrExisting]",
+      "virtualNetworkName": "[steps('StorageNetworkConfig').virtualNetwork.name]",
+      "virtualNetworkResourceGroup": "[steps('StorageNetworkConfig').virtualNetwork.resourceGroup]",
+      "addressPrefix": "[steps('StorageNetworkConfig').virtualNetwork.addressPrefix]",
+      "subnetName": "[steps('StorageNetworkConfig').virtualNetwork.subnets.subnet1.name]",
+      "subnetPrefix": "[steps('StorageNetworkConfig').virtualNetwork.subnets.subnet1.addressPrefix]"
+    }
+  }
+  }
