@@ -43,18 +43,6 @@
         "options": {
           "hideConfirmation": false
         }
-      },
-      {
-        "name": "sizeofDataDiskInGB",
-        "type": "Microsoft.Common.TextBox",
-        "label": "Size of FortiMail data disk measured in Gigabytes",
-        "toolTip": "This will be used to set the vhd size for the data disk.",
-        "defaultValue": "80",
-        "constraints": {
-          "required": true,
-          "regex": "^([4-9][0-9]|[1-9][0-9][0-9]|10[0-2][0-3])$",
-          "validationMessage": "Only 40 - 1023 allowed"
-        }
       }
     ],
     "steps": [
@@ -177,7 +165,7 @@
             },
             "options": {
               "hideNone": true,
-              "hideDomainNameLabel": true 
+              "hideDomainNameLabel": true
             }
           },
           {

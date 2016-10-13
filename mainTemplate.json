@@ -96,13 +96,6 @@
             "description": "Resource group to which the Public IP belongs."
           }
         },
-        "sizeOfDataDiskInGB": {
-          "type": "string",
-          "defaultValue": "80",
-          "metadata": {
-            "description": "Size of data disk in GB"
-          }
-        },
         "artifactsBaseUrl": {
           "type": "string",
           "defaultValue": "https://raw.githubusercontent.com/fortinetclouddev/FortiMail/1.0.0",
@@ -245,7 +238,7 @@
                     "osDisk": {
                         "name": "[parameters('virtualMachineName')]",
                         "vhd": {
-                            "uri": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net/vhds/', parameters('virtualMachineName'), '-osdisk', '.vhd')]"
+                            "uri": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net/vhds/', parameters('virtualMachineName'), '-', resourceGroup().name, '-osdisk', '.vhd')]"
                         },
                         "createOption": "fromImage"
                     },
@@ -253,10 +246,10 @@
                       {
                         "name": "[concat(parameters('virtualMachineName'),'-dataDisk')]",
                         "createOption": "Empty",
-                        "diskSizeGB": "[parameters('sizeOfDataDiskInGB')]",
+                        "diskSizeGB": "1023",
                         "lun": 0,
                         "vhd": {
-                          "uri": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net/vhds/', parameters('virtualMachineName'), '-datadisk', '.vhd')]"
+                          "uri": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net/vhds/', parameters('virtualMachineName'), '-', resourceGroup().name, '-datadisk', '.vhd')]"
                         }
                       }
                     ]
