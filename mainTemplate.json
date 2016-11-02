@@ -39,7 +39,8 @@
           "type": "string"
         },
         "addressPrefix": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": ""
         },
         "subnetName": {
             "type": "string"
@@ -78,7 +79,8 @@
           }
         },
         "publicIpAddressName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": ""
         },
         "publicIpAddressType": {
             "defaultValue": "Static",
@@ -98,7 +100,7 @@
         },
         "artifactsBaseUrl": {
           "type": "string",
-          "defaultValue": "https://raw.githubusercontent.com/fortinetclouddev/FortiMail/1.0.0",
+          "defaultValue": "https://raw.githubusercontent.com/fortinetclouddev/FortiMail/1.0.2",
           "metadata": {
             "description": "Base URL of the solution template gallery package",
             "artifactsBaseUrl": ""
