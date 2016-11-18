@@ -60,11 +60,11 @@
             "type": "Microsoft.Network.VirtualNetworkCombo",
             "label": {
               "virtualNetwork": "Virtual network",
-              "subnet": "Subnet"
+              "subnets": "Subnet"
             },
             "toolTip": {
               "virtualNetwork": "Virtual network name",
-              "subnet": "Subnet required for the FortiMail solution"
+              "subnets": "Subnet required for the FortiMail solution"
             },
             "defaultValue": {
               "name": "FortiMailVNet",
