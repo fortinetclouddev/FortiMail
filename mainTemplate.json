@@ -243,8 +243,7 @@
                 }
               }
             }
-          ],
-          "enableIPForwarding": true
+          ]
         }
       },
       {
