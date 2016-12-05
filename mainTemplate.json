@@ -294,10 +294,16 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]"
+                          "properties": {
+                            "primary": true
+                          },
+                          "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]"
                         },
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterface2Name'))]"
+                          "properties":{
+                            "primary": false
+                          },
+                          "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterface2Name'))]"
                         }
                     ]
                 },
