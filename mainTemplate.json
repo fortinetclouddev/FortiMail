@@ -39,13 +39,15 @@
           "type": "string"
         },
         "addressPrefix": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": ""
         },
         "subnetName": {
             "type": "string"
         },
         "subnetPrefix": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": ""
         },
         "adminPassword": {
             "type": "securestring"
