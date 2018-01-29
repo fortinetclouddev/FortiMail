@@ -16,6 +16,31 @@
         }
       },
       {
+        "name": "skuSelectorElement",
+        "type": "Microsoft.Common.OptionsGroup",
+        "label": "FortiMail Version",
+        "toolTip": "Select Select which version of FortiMail you wish to deploy",
+        "defaultValue": "FortiMail 5.3.9 (BYOL)",
+        "constraints": {
+          "allowedValues": [
+            {
+              "label": "FortiMail 5.3.3 (BYOL)",
+              "value": {
+                "SKU": "fortinet_fortimail",
+                "Version": "5.3.3"
+              }
+            },
+            {
+              "label": "FortiMail 5.3.9 (BYOL)",
+              "value": {
+                "SKU": "fortinet_fortimail",
+                "Version": "5.3.9"
+              }
+            }
+          ]
+        }
+      },
+      {
         "name": "adminUsername",
         "type": "Microsoft.Compute.UserNameTextBox",
         "label": "FortiMail administrative username",
@@ -47,13 +72,13 @@
     ],
     "steps": [
       {
-        "name": "StorageNetworkConfig",
-        "label": "Network and Storage Settings",
+        "name": "NetworkInstanceConfig",
+        "label": "Network and Instance Settings",
         "subLabel": {
           "preValidation": "Configure the network and storage options",
           "postValidation": "Done"
         },
-        "bladeTitle": "Network and storage settings",
+        "bladeTitle": "Network and Instance Settings",
         "elements": [
           {
             "name": "virtualNetwork",
@@ -94,20 +119,32 @@
             "label": "Virtual machine size",
             "toolTip": "The size of virtual machine to provision.",
             "recommendedSizes": [
-              "Standard_D2_v2",
-              "Standard_D3_v2",
-              "Standard_D4_v2"
+              "Standard_F2s_v2",
+              "Standard_F4s_v2"
             ],
             "constraints": {
               "allowedSizes": [
-                "Standard_A3",
                 "Standard_A4",
                 "Standard_D2",
                 "Standard_D3",
                 "Standard_D4",
+                "Standard_D1_v2",
                 "Standard_D2_v2",
                 "Standard_D3_v2",
-                "Standard_D4_v2"
+                "Standard_D4_v2",
+                "Standard_F1",
+                "Standard_F2",
+                "Standard_F4",
+                "Standard_F8",
+                "Standard_F1s",
+                "Standard_F2s",
+                "Standard_F4s",
+                "Standard_F8s",
+                "Standard_F16s",
+                "Standard_F2s_v2",
+                "Standard_F4s_v2",
+                "Standard_F8s_v2",
+                "Standard_F16s_v2"
               ],
               "required": true
             },
@@ -118,22 +155,6 @@
               "sku": "fortinet_fortimail"
             },
             "count": "1"
-          },
-          {
-            "name": "storageAccount",
-            "type": "Microsoft.Storage.StorageAccountSelector",
-            "label": "Storage account",
-            "toolTip": "Storage Account for the disk drive of the Virtual FortiMail.",
-            "defaultValue": {
-              "type": "Standard_LRS"
-            },
-            "constraints": {
-              "allowedTypes": [
-                "Standard_LRS",
-                "Standard_GRS"
-              ],
-              "required": true
-            }
           }
         ]
       },
@@ -192,25 +213,23 @@
       }
     ],
     "outputs": {
-      "virtualMachineName": "[basics('VMName')]",
+      "FortiMailVAName": "[basics('VMName')]",
       "adminUsername": "[basics('adminUsername')]",
       "adminPassword": "[basics('passwordElement')]",
-      "virtualMachineSize": "[steps('StorageNetworkConfig').vmSize]",
+      "FortiMailImageVersion": "[basics('skuSelectorElement').Version]",
+      "instanceType": "[steps('NetworkInstanceConfig').vmSize]",
       "publicIpAddressName": "[steps('IPConfig').publicIpAddress.name]",
       "publicIPAddressType": "[steps('IPConfig').publicIPAddressTypeElement]",
       "publicIPNewOrExistingOrNone": "[steps('IPConfig').publicIpAddress.newOrExistingOrNone]",
-      "publicIpAddressResourceGroup": "[steps('IPConfig').publicIpAddress.resourceGroup]",
-      "storageAccountName": "[steps('StorageNetworkConfig').storageAccount.name]",
-      "storageAccountType": "[steps('StorageNetworkConfig').storageAccount.type]",
-      "storageAccountNewOrExisting": "[steps('StorageNetworkConfig').storageAccount.newOrExisting]",
-      "storageAccountResourceGroup": "[steps('StorageNetworkConfig').storageAccount.resourceGroup]",
+      "publicIpResourceGroup": "[steps('IPConfig').publicIpAddress.resourceGroup]",
       "location": "[location()]",
-      "virtualNetworkNewOrExisting": "[steps('StorageNetworkConfig').virtualNetwork.newOrExisting]",
-      "virtualNetworkName": "[steps('StorageNetworkConfig').virtualNetwork.name]",
-      "virtualNetworkResourceGroup": "[steps('StorageNetworkConfig').virtualNetwork.resourceGroup]",
-      "addressPrefix": "[steps('StorageNetworkConfig').virtualNetwork.addressPrefix]",
-      "subnetName": "[steps('StorageNetworkConfig').virtualNetwork.subnets.subnet1.name]",
-      "subnetPrefix": "[steps('StorageNetworkConfig').virtualNetwork.subnets.subnet1.addressPrefix]"
+      "vnetNewOrExisting": "[steps('NetworkInstanceConfig').virtualNetwork.newOrExisting]",
+      "vnetName": "[steps('NetworkInstanceConfig').virtualNetwork.name]",
+      "vnetResourceGroup": "[steps('NetworkInstanceConfig').virtualNetwork.resourceGroup]",
+      "vnetAddressPrefix": "[steps('NetworkInstanceConfig').virtualNetwork.addressPrefixes]",
+      "subnetName": "[steps('NetworkInstanceConfig').virtualNetwork.subnets.subnet1.name]",
+      "subnetPrefix": "[steps('NetworkInstanceConfig').virtualNetwork.subnets.subnet1.addressPrefix]",
+      "FortiMailPrivateIP": "[steps('NetworkInstanceConfig').virtualNetwork.subnets.subnet1.startAddress]"
     }
   }
   }

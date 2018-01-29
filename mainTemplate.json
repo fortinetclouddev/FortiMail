@@ -21,11 +21,6 @@
         "FortiMailImageVersion": {
           "type": "string",
           "defaultValue": "latest",
-          "allowedValues":[
-           "5.3.3",
-           "5.3.9",
-           "latest" 
-          ],
           "metadata": {
             "description": "Select image version"
           }
@@ -84,7 +79,6 @@
               "Static"
             ],
             "type": "string"
-
         },
         "publicIpResourceGroup": {
           "type": "string",
