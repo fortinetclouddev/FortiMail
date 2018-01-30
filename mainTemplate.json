@@ -70,7 +70,7 @@
         },
         "publicIpAddressName": {
             "type": "string",
-            "defaultValue": ""
+            "defaultValue": "blank"
         },
         "publicIpAddressType": {
             "defaultValue": "Static",
@@ -82,7 +82,7 @@
         },
         "publicIpResourceGroup": {
           "type": "string",
-          "defaultValue": "",
+          "defaultValue": "blank",
           "metadata": {
             "description": "Resource group to which the Public IP belongs."
           }
