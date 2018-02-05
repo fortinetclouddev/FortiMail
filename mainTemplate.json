@@ -98,7 +98,35 @@
       "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
       "networkInterfaceName": "[concat(parameters('FortiMailVAName'), '-NIC0')]",
       "NSGName": "[concat(parameters('FortiMailVAName'),'-NSG')]",
-      "publicIPID": "[resourceId(parameters('publicIPResourceGroup'), 'Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]"
+      "publicIPID": "[resourceId(parameters('publicIPResourceGroup'), 'Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]",
+      "NICwPIP": [
+        {
+          "name": "ipconfig1",
+          "properties": {
+            "privateIPAllocationMethod": "Static",
+            "privateIPAddress": "[parameters('FortiMailPrivateIP')]",
+            "subnet": {
+              "id": "[variables('SubnetRef')]"
+            },
+            "publicIPAddress": {
+              "id": "[variables('publicIPID')]"
+            }
+          }
+        }
+      ],
+  
+      "NICwoPIP": [
+        {
+          "name": "ipconfig1",
+          "properties": {
+            "privateIPAllocationMethod": "Static",
+            "privateIPAddress": "[parameters('FortiMailPrivateIP')]",
+            "subnet": {
+              "id": "[variables('SubnetRef')]"
+            }
+          }
+        }
+      ]
     },
     "resources": [
       {
@@ -217,19 +245,8 @@
         "name": "[variables('networkInterfaceName')]",
         "location": "[parameters('location')]",
         "properties": {
-          "ipConfigurations": [
-            {
-            "name": "ipconfig1",
-            "properties": {
-              "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[parameters('FortiMailPrivateIP')]",
-              "subnet": {
-                "id": "[variables('SubnetRef')]"
-              },
-              "publicIPAddress": "[if(not(equals(parameters('publicIpNewOrExistingorNone'), 'none')), variables('publicIPID') , json('null'))]"
-            }
-          }
-          ]
+          "ipConfigurations": "[if(equals(parameters('publicIPNewOrExistingOrNone'), 'none'), variables('NICwoPIP'), variables('NICwPIP'))]",
+          "enableIPForwarding": false
         }
       },
       {
