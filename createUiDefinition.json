@@ -98,7 +98,7 @@
             },
             "subnets": {
               "subnet1": {
-                "label": "Outside subnet",
+                "label": "Subnet Name",
                 "defaultValue": {
                   "name": "Subnet1",
                   "addressPrefixSize": "/24"
@@ -225,7 +225,7 @@
       "vnetResourceGroup": "[steps('NetworkInstanceConfig').virtualNetwork.resourceGroup]",
       "vnetAddressPrefixes": "[steps('NetworkInstanceConfig').virtualNetwork.addressPrefixes]",
       "subnetName": "[steps('NetworkInstanceConfig').virtualNetwork.subnets.subnet1.name]",
-      "subnetPrefix": "[steps('NetworkInstanceConfig').virtualNetwork.subnets.subnet1.addressPrefixes]",
+      "subnetPrefix": "[steps('NetworkInstanceConfig').virtualNetwork.subnets.subnet1.addressPrefix]",
       "FortiMailPrivateIP": "[steps('NetworkInstanceConfig').virtualNetwork.subnets.subnet1.startAddress]"
     }
   }
